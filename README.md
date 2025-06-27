@@ -89,6 +89,10 @@ Sample data includes:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 🌐 Data source
+
+This dataset from kaggle with [Link Dataset](https://www.kaggle.com/datasets/rendiputra/stunting-balita-detection-121k-rows/data?select=data_balita.csv)
+
 ## ⚠️ Disclaimer
 
 This application is for educational purposes only and does not replace professional medical consultation.
