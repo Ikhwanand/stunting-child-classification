@@ -299,7 +299,7 @@ elif menu == "🤖 Prediksi":
             status_colors = {
                 "normal": "green",
                 "stunted": "orange",
-                "severly stunted": "red",
+                "severely stunted": "red",
                 "tinggi": "blue",
             }
 
