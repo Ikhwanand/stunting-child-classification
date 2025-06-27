@@ -91,6 +91,7 @@ pandocfilters==1.5.1
 parso==0.8.4
 pathspec==0.12.1
 pillow==11.2.1
+pip==25.1.1
 platformdirs==4.3.8
 plotly==6.2.0
 primp==0.15.0
