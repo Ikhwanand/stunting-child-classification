@@ -9,6 +9,7 @@ dependencies = [
     "arxiv>=2.2.0",
     "baidusearch>=1.0.3",
     "duckduckgo-search>=8.0.4",
+    "fastapi[standard]>=0.115.14",
     "google-genai>=1.22.0",
     "jupyter>=1.1.1",
     "matplotlib>=3.10.3",

@@ -18,6 +18,7 @@ A Streamlit web application for classifying and analyzing child stunting/nutriti
 - Plotly (visualizations)
 - Pandas (data processing)
 - Joblib (model serialization)
+- FastAPI (API framework)
 
 ## 🚀 Installation
 
@@ -60,6 +61,8 @@ stunting-child-classification/
 ├── notebooks/              # Jupyter notebooks
 │   └── nb-1.ipynb          # Data exploration notebook
 ├── agent.py                # Recommendation agent
+├── api.py                  # API endpoints for predictions
+|── test_api.py             # Testing API endpoints
 ├── main.py                 # Main Streamlit app
 ├── README.md               # This file
 ├── requirements.txt        # Python dependencies
