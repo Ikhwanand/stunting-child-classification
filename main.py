@@ -81,6 +81,20 @@ def load_data():
         }
         return pd.DataFrame(data)
 
+# Fungsi untuk menyimpan data pertumbuhan anak
+@st.cache_data
+def save_growth_data(child_id, age, height, weight):
+    file_path = f"./data/growth_{child_id}.csv"
+    try:
+        df = pd.read_csv(file_path)
+    except:
+        df = pd.DataFrame(columns=["Tanggal", "Umur (bulan)", "Tinggi (cm)", "Berat (kg)"])
+    
+    new_data = pd.DataFrame([[pd.Timestamp.now(), age, height, weight]],
+                          columns=df.columns)
+    df = pd.concat([df, new_data])
+    df.to_csv(file_path, index=False)
+
 
 # Header utama
 st.markdown(
@@ -97,6 +111,7 @@ menu = st.sidebar.selectbox(
         "📊 Analisis Data",
         "🤖 Prediksi",
         "📈 Visualisasi",
+        "👶 Pelacakan Pertumbuhan",
         "ℹ️ Info Model",
     ],
 )
@@ -430,6 +445,54 @@ elif menu == "📈 Visualisasi":
         )
         st.plotly_chart(fig_hist, use_container_width=True)
 
+
+elif menu == "👶 Pelacakan Pertumbuhan":
+    st.markdown("<h2 class='sub-header'>Pelacakan Pertumbuhan Anak</h2>", unsafe_allow_html=True)
+    
+    # Form input data baru
+    with st.form("growth_form"):
+        child_id = st.text_input("ID Anak")
+        age = st.number_input("Umur (bulan)", min_value=0, max_value=60)
+        height = st.number_input("Tinggi Badan (cm)", min_value=40.0, max_value=120.0)
+        weight = st.number_input("Berat Badan (kg)", min_value=2.0, max_value=30.0)
+        
+        if st.form_submit_button("Simpan Data"):
+            save_growth_data(child_id, age, height, weight)
+            st.success("Data berhasil disimpan!")
+    
+    # Visualisasi
+    if st.checkbox("Tampilkan Grafik Pertumbuhan"):
+        try:
+            growth_df = pd.read_csv(f"./data/growth_{child_id}.csv")
+            
+            fig = px.line(growth_df, x="Umur (bulan)", y="Tinggi (cm)",
+                         title="Perkembangan Tinggi Badan",
+                         markers=True)
+            
+            # Tambahkan kurva referensi WHO
+            who_data = {
+                "Umur (bulan)": [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60],
+                "Median": [49.1, 67.8, 74.0, 80.2, 85.6, 89.8, 93.4, 96.7, 99.5, 102.1, 104.5],
+                "-2SD": [46.1, 61.8, 67.6, 73.3, 78.0, 81.7, 85.1, 88.2, 91.0, 93.5, 95.8],
+                "+2SD": [52.2, 73.9, 80.5, 87.1, 93.2, 97.9, 101.8, 105.2, 108.0, 110.7, 113.2]
+            }
+            
+            fig.add_scatter(x=who_data["Umur (bulan)"], y=who_data["Median"],
+                          name="WHO Median", line=dict(color="green", dash="dash"))
+            fig.add_scatter(x=who_data["Umur (bulan)"], y=who_data["-2SD"],
+                          name="WHO -2SD", line=dict(color="red", dash="dot"))
+            fig.add_scatter(x=who_data["Umur (bulan)"], y=who_data["+2SD"],
+                          name="WHO +2SD", line=dict(color="blue", dash="dot"))
+            
+            st.plotly_chart(fig, use_container_width=True)
+            
+            # Visualisasi berat badan
+            fig_weight = px.line(growth_df, x="Umur (bulan)", y="Berat (kg)",
+                               title="Perkembangan Berat Badan",
+                               markers=True)
+            st.plotly_chart(fig_weight, use_container_width=True)
+        except:
+            st.warning("Belum ada data pertumbuhan untuk anak ini")
 
 elif menu == "ℹ️ Info Model":
     st.markdown(
